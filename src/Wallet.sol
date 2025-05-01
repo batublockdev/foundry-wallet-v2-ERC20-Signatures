@@ -1,23 +1,3 @@
-// Layout of Contract:
-// version
-// imports
-// errors
-// interfaces, libraries, contracts
-// Type declarations
-// State variables
-// Events
-// Modifiers
-// Functions
-
-// Layout of Functions:
-// constructor
-// receive function (if exists)
-// fallback function (if exists)
-// external
-// public
-// internal
-// private
-// view & pure functions
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
@@ -31,9 +11,9 @@ import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/Messa
  * @title Wallet
  * @author batublockdev
  * @notice This contract allows a users to deposit funds to the owner's wallet,
- * but only the owner can withdraw or transfer funds, the upgrade in this vertion is
- * that users can withdraw funds with the owner premission using a signature, in the same way
- * this vertion accepts ERC20 tokens.
+ * but only the owner can withdraw or transfer funds, the upgrade in this version is
+ * that users can withdraw funds with the owner's premission using a signature, aditionally
+ * this version accepts ERC20 tokens as a currency.
  */
 
 contract Wallet is EIP712 {

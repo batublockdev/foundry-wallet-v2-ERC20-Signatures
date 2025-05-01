@@ -134,6 +134,41 @@ contract WalletTest is Test {
         assertEq(token.balanceOf(freind), 50 ether);
     }
 
+    function test_claim_check_token_x() public execution_token {
+        // get the signature
+        vm.startPrank(owner);
+        (uint8 v, bytes32 r, bytes32 s) = signMessage(
+            ownerPrivKey,
+            freind,
+            50 ether,
+            address(token)
+        );
+        vm.stopPrank();
+        vm.prank(freind);
+        wallet.claim_Check(freind, 50 ether, address(token), v, r, s);
+        assertEq(token.balanceOf(address(wallet)), 50 ether);
+        assertEq(token.balanceOf(freind), 50 ether);
+
+        ///////
+        vm.expectRevert();
+        vm.prank(freind);
+        wallet.claim_Check(freind, 50 ether, address(token), v, r, s);
+
+        /////
+        vm.startPrank(owner);
+        (uint8 v2, bytes32 r2, bytes32 s2) = signMessage(
+            ownerPrivKey,
+            xuserx,
+            50 ether,
+            address(token)
+        );
+        vm.stopPrank();
+        vm.prank(xuserx);
+        wallet.claim_Check(xuserx, 50 ether, address(token), v2, r2, s2);
+        assertEq(token.balanceOf(address(wallet)), 0 ether);
+        assertEq(token.balanceOf(xuserx), 50 ether);
+    }
+
     function test_Owner() public {
         vm.prank(xuserx);
         vm.expectRevert();
@@ -143,6 +178,13 @@ contract WalletTest is Test {
     function test_notEnoughFunds() public execution {
         vm.expectRevert();
         wallet.withdraw(200);
+    }
+
+    function test_notEnoughFunds_token() public execution_token {
+        vm.startPrank(owner);
+        vm.expectRevert();
+        wallet.withdraw_token(address(token), 150 ether);
+        vm.stopPrank();
     }
 
     receive() external payable {}
